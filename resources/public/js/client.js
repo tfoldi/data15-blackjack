@@ -36408,13 +36408,13 @@ taoensso.sente.set_logging_level_BANG_.call(null, new cljs.core.Keyword(null, "t
 taoensso.timbre.log1_fn.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "debug", "debug", -1608172596), "data15_blackjack.client", "C:\\Users\\tfoldi\\AppData\\Local\\Temp\\form-init4571525117458505539.clj", null, new cljs.core.Keyword(null, "f", "f", -1597136552), new cljs.core.Delay(function() {
   return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["ClojureScript appears to have loaded correctly."], null);
 }, null), null);
-var map__26913_26915 = taoensso.sente.make_channel_socket_BANG_.call(null, "/chsk", new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Keyword(null, "packer", "packer", 66077544), new cljs.core.Keyword(null, "edn", "edn", 1317840885)], null)), map__26913_26916__$1 = null != map__26913_26915 && (map__26913_26915.cljs$lang$protocol_mask$partition0$ & 64 || map__26913_26915.cljs$core$ISeq$) ? 
-cljs.core.apply.call(null, cljs.core.hash_map, map__26913_26915) : map__26913_26915, chsk_26917 = cljs.core.get.call(null, map__26913_26916__$1, new cljs.core.Keyword(null, "chsk", "chsk", -863703081)), ch_recv_26918 = cljs.core.get.call(null, map__26913_26916__$1, new cljs.core.Keyword(null, "ch-recv", "ch-recv", -990916861)), send_fn_26919 = cljs.core.get.call(null, map__26913_26916__$1, new cljs.core.Keyword(null, "send-fn", "send-fn", 351002041)), state_26920 = cljs.core.get.call(null, map__26913_26916__$1, 
+var map__27109_27111 = taoensso.sente.make_channel_socket_BANG_.call(null, "/chsk", new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Keyword(null, "packer", "packer", 66077544), new cljs.core.Keyword(null, "edn", "edn", 1317840885)], null)), map__27109_27112__$1 = null != map__27109_27111 && (map__27109_27111.cljs$lang$protocol_mask$partition0$ & 64 || map__27109_27111.cljs$core$ISeq$) ? 
+cljs.core.apply.call(null, cljs.core.hash_map, map__27109_27111) : map__27109_27111, chsk_27113 = cljs.core.get.call(null, map__27109_27112__$1, new cljs.core.Keyword(null, "chsk", "chsk", -863703081)), ch_recv_27114 = cljs.core.get.call(null, map__27109_27112__$1, new cljs.core.Keyword(null, "ch-recv", "ch-recv", -990916861)), send_fn_27115 = cljs.core.get.call(null, map__27109_27112__$1, new cljs.core.Keyword(null, "send-fn", "send-fn", 351002041)), state_27116 = cljs.core.get.call(null, map__27109_27112__$1, 
 new cljs.core.Keyword(null, "state", "state", -1988618099));
-data15_blackjack.client.chsk = chsk_26917;
-data15_blackjack.client.ch_chsk = ch_recv_26918;
-data15_blackjack.client.chsk_send_BANG_ = send_fn_26919;
-data15_blackjack.client.chsk_state = state_26920;
+data15_blackjack.client.chsk = chsk_27113;
+data15_blackjack.client.ch_chsk = ch_recv_27114;
+data15_blackjack.client.chsk_send_BANG_ = send_fn_27115;
+data15_blackjack.client.chsk_state = state_27116;
 data15_blackjack.client.unbuttonize = function(a) {
   return clojure.string.replace.call(null, a.toElement.id, "btn-", "");
 };
@@ -36443,50 +36443,50 @@ data15_blackjack.client.login_event_handler = function(a) {
     };
   }(b));
 };
-for (var seq__26921_26925 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("login-button"))), chunk__26922_26926 = null, count__26923_26927 = 0, i__26924_26928 = 0;;) {
-  if (i__26924_26928 < count__26923_26927) {
-    var button_26929 = cljs.core._nth.call(null, chunk__26922_26926, i__26924_26928);
-    dommy.core.listen_BANG_.call(null, button_26929, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
-    var G__26930 = seq__26921_26925, G__26931 = chunk__26922_26926, G__26932 = count__26923_26927, G__26933 = i__26924_26928 + 1, seq__26921_26925 = G__26930, chunk__26922_26926 = G__26931, count__26923_26927 = G__26932, i__26924_26928 = G__26933;
+for (var seq__27117_27121 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("login-button"))), chunk__27118_27122 = null, count__27119_27123 = 0, i__27120_27124 = 0;;) {
+  if (i__27120_27124 < count__27119_27123) {
+    var button_27125 = cljs.core._nth.call(null, chunk__27118_27122, i__27120_27124);
+    dommy.core.listen_BANG_.call(null, button_27125, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
+    var G__27126 = seq__27117_27121, G__27127 = chunk__27118_27122, G__27128 = count__27119_27123, G__27129 = i__27120_27124 + 1, seq__27117_27121 = G__27126, chunk__27118_27122 = G__27127, count__27119_27123 = G__27128, i__27120_27124 = G__27129;
   } else {
-    var temp__4425__auto___26934 = cljs.core.seq.call(null, seq__26921_26925);
-    if (temp__4425__auto___26934) {
-      var seq__26921_26935__$1 = temp__4425__auto___26934;
-      if (cljs.core.chunked_seq_QMARK_.call(null, seq__26921_26935__$1)) {
-        var c__5366__auto___26936 = cljs.core.chunk_first.call(null, seq__26921_26935__$1), G__26937 = cljs.core.chunk_rest.call(null, seq__26921_26935__$1), G__26938 = c__5366__auto___26936, G__26939 = cljs.core.count.call(null, c__5366__auto___26936), G__26940 = 0, seq__26921_26925 = G__26937, chunk__26922_26926 = G__26938, count__26923_26927 = G__26939, i__26924_26928 = G__26940
+    var temp__4425__auto___27130 = cljs.core.seq.call(null, seq__27117_27121);
+    if (temp__4425__auto___27130) {
+      var seq__27117_27131__$1 = temp__4425__auto___27130;
+      if (cljs.core.chunked_seq_QMARK_.call(null, seq__27117_27131__$1)) {
+        var c__5366__auto___27132 = cljs.core.chunk_first.call(null, seq__27117_27131__$1), G__27133 = cljs.core.chunk_rest.call(null, seq__27117_27131__$1), G__27134 = c__5366__auto___27132, G__27135 = cljs.core.count.call(null, c__5366__auto___27132), G__27136 = 0, seq__27117_27121 = G__27133, chunk__27118_27122 = G__27134, count__27119_27123 = G__27135, i__27120_27124 = G__27136
       } else {
-        var button_26941 = cljs.core.first.call(null, seq__26921_26935__$1);
-        dommy.core.listen_BANG_.call(null, button_26941, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
-        var G__26942 = cljs.core.next.call(null, seq__26921_26935__$1), G__26943 = null, G__26944 = 0, G__26945 = 0, seq__26921_26925 = G__26942, chunk__26922_26926 = G__26943, count__26923_26927 = G__26944, i__26924_26928 = G__26945;
+        var button_27137 = cljs.core.first.call(null, seq__27117_27131__$1);
+        dommy.core.listen_BANG_.call(null, button_27137, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
+        var G__27138 = cljs.core.next.call(null, seq__27117_27131__$1), G__27139 = null, G__27140 = 0, G__27141 = 0, seq__27117_27121 = G__27138, chunk__27118_27122 = G__27139, count__27119_27123 = G__27140, i__27120_27124 = G__27141;
       }
     } else {
       break;
     }
   }
 }
-for (var seq__26946_26950 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("game-button"))), chunk__26947_26951 = null, count__26948_26952 = 0, i__26949_26953 = 0;;) {
-  if (i__26949_26953 < count__26948_26952) {
-    var button_26954 = cljs.core._nth.call(null, chunk__26947_26951, i__26949_26953);
-    dommy.core.listen_BANG_.call(null, button_26954, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e) {
+for (var seq__27142_27146 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("game-button"))), chunk__27143_27147 = null, count__27144_27148 = 0, i__27145_27149 = 0;;) {
+  if (i__27145_27149 < count__27144_27148) {
+    var button_27150 = cljs.core._nth.call(null, chunk__27143_27147, i__27145_27149);
+    dommy.core.listen_BANG_.call(null, button_27150, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e) {
       return function(a) {
         return data15_blackjack.client.chsk_send_BANG_.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("data15-blackjack", "click", "data15-blackjack/click", 1073928180), data15_blackjack.client.unbuttonize.call(null, a)], null));
       };
-    }(seq__26946_26950, chunk__26947_26951, count__26948_26952, i__26949_26953, button_26954));
-    var G__26955 = seq__26946_26950, G__26956 = chunk__26947_26951, G__26957 = count__26948_26952, G__26958 = i__26949_26953 + 1, seq__26946_26950 = G__26955, chunk__26947_26951 = G__26956, count__26948_26952 = G__26957, i__26949_26953 = G__26958;
+    }(seq__27142_27146, chunk__27143_27147, count__27144_27148, i__27145_27149, button_27150));
+    var G__27151 = seq__27142_27146, G__27152 = chunk__27143_27147, G__27153 = count__27144_27148, G__27154 = i__27145_27149 + 1, seq__27142_27146 = G__27151, chunk__27143_27147 = G__27152, count__27144_27148 = G__27153, i__27145_27149 = G__27154;
   } else {
-    var temp__4425__auto___26959 = cljs.core.seq.call(null, seq__26946_26950);
-    if (temp__4425__auto___26959) {
-      var seq__26946_26960__$1 = temp__4425__auto___26959;
-      if (cljs.core.chunked_seq_QMARK_.call(null, seq__26946_26960__$1)) {
-        var c__5366__auto___26961 = cljs.core.chunk_first.call(null, seq__26946_26960__$1), G__26962 = cljs.core.chunk_rest.call(null, seq__26946_26960__$1), G__26963 = c__5366__auto___26961, G__26964 = cljs.core.count.call(null, c__5366__auto___26961), G__26965 = 0, seq__26946_26950 = G__26962, chunk__26947_26951 = G__26963, count__26948_26952 = G__26964, i__26949_26953 = G__26965
+    var temp__4425__auto___27155 = cljs.core.seq.call(null, seq__27142_27146);
+    if (temp__4425__auto___27155) {
+      var seq__27142_27156__$1 = temp__4425__auto___27155;
+      if (cljs.core.chunked_seq_QMARK_.call(null, seq__27142_27156__$1)) {
+        var c__5366__auto___27157 = cljs.core.chunk_first.call(null, seq__27142_27156__$1), G__27158 = cljs.core.chunk_rest.call(null, seq__27142_27156__$1), G__27159 = c__5366__auto___27157, G__27160 = cljs.core.count.call(null, c__5366__auto___27157), G__27161 = 0, seq__27142_27146 = G__27158, chunk__27143_27147 = G__27159, count__27144_27148 = G__27160, i__27145_27149 = G__27161
       } else {
-        var button_26966 = cljs.core.first.call(null, seq__26946_26960__$1);
-        dommy.core.listen_BANG_.call(null, button_26966, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e, f, g) {
+        var button_27162 = cljs.core.first.call(null, seq__27142_27156__$1);
+        dommy.core.listen_BANG_.call(null, button_27162, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e, f, g) {
           return function(a) {
             return data15_blackjack.client.chsk_send_BANG_.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("data15-blackjack", "click", "data15-blackjack/click", 1073928180), data15_blackjack.client.unbuttonize.call(null, a)], null));
           };
-        }(seq__26946_26950, chunk__26947_26951, count__26948_26952, i__26949_26953, button_26966, seq__26946_26960__$1, temp__4425__auto___26959));
-        var G__26967 = cljs.core.next.call(null, seq__26946_26960__$1), G__26968 = null, G__26969 = 0, G__26970 = 0, seq__26946_26950 = G__26967, chunk__26947_26951 = G__26968, count__26948_26952 = G__26969, i__26949_26953 = G__26970;
+        }(seq__27142_27146, chunk__27143_27147, count__27144_27148, i__27145_27149, button_27162, seq__27142_27156__$1, temp__4425__auto___27155));
+        var G__27163 = cljs.core.next.call(null, seq__27142_27156__$1), G__27164 = null, G__27165 = 0, G__27166 = 0, seq__27142_27146 = G__27163, chunk__27143_27147 = G__27164, count__27144_27148 = G__27165, i__27145_27149 = G__27166;
       }
     } else {
       break;

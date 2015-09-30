@@ -48,7 +48,7 @@
         {:keys [role user-id]} params]
     (debugf "Login request: %s" params)
     (blackjack/set-player-name! role user-id)
-    {:status 200 :session (assoc session :uid user-id)}))
+    {:status 200 :session (assoc session :role role :uid user-id)}))
 
 (defn landing-pg-handler [req]
   "Langing page containing the tableau JS API vizardry"
@@ -65,7 +65,7 @@
     [:p
      [:button#btn-hit {:class "game-button" :type "button"} "hit"]
      [:button#btn-stand {:class "game-button" :type "button"} "stand"]
-     [:button#btn-reset {:class "game-button" :type "button"} "reset"]]
+     [:button#btn-reset {:class "game-button" :type "button"} "new"]]
     [:script {:src "js/client.js"}]                         ; Include our cljs target
 
     ))
@@ -126,6 +126,10 @@
     (let [session (:session ring-req)
           uid (:uid session)]
       (debugf "Initalize request: %s uid: %s data: %s" event uid ?data)
+      (condp = ?data
+        "reset" (blackjack/start-game)
+        "stand" (blackjack/stand (get session :role))
+        "hit" (blackjack/hit-me (get session :role)))
       (broadcast-state!)))
 
   ;; Add your (defmethod event-msg-handler <event-id> [ev-msg] <body>)s here...
