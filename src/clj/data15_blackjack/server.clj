@@ -6,12 +6,14 @@
     [compojure.core :as comp :refer (defroutes GET POST)]
     [compojure.route :as route]
     [hiccup.core :as hiccup]
+    [hiccup.page :refer (include-js include-css)]
     [clojure.core.async :as async :refer (<! <!! >! >!! put! chan go go-loop)]
     [taoensso.encore :as encore :refer ()]
     [taoensso.timbre :as timbre :refer (tracef debugf infof warnf errorf)]
     [taoensso.sente :as sente]
     [org.httpkit.server :as http-kit]
-    [taoensso.sente.server-adapters.http-kit :refer (sente-web-server-adapter)])
+    [taoensso.sente.server-adapters.http-kit :refer (sente-web-server-adapter)]
+    [data15-blackjack.blackjack :as blackjack])
   (:gen-class))
 
 ;;;; Logging config
@@ -35,33 +37,37 @@
   (def ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn)
   (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
   (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
-  (def connected-uids connected-uids)                       ; Watchable, read-only atom
-  )
+  (def connected-uids connected-uids))                      ; Watchable, read-only atom
+
 
 (defn login!
   "Login methods sets the user name. No real login, just associate the username with
   the websocket. Later on this user-id will be used to send messages to one client only"
   [ring-request]
   (let [{:keys [session params]} ring-request
-        {:keys [user-id]} params]
+        {:keys [role user-id]} params]
     (debugf "Login request: %s" params)
+    (blackjack/set-player-name! role user-id)
     {:status 200 :session (assoc session :uid user-id)}))
 
 (defn landing-pg-handler [req]
   "Langing page containing the tableau JS API vizardry"
   (hiccup/html
-    [:h1 "Please add some nice tableau viz to this page"]
-    [:p "An Ajax/WebSocket connection has been configured (random)."]
-    [:hr]
-    [:p [:strong "Push me hard: "] "Try: "
-     [:button#btn1 {:type "button"} "chsk-send! (w/o reply)"]
-     [:button#btn2 {:type "button"} "chsk-send! (with reply)"]]
-    ;;
-    [:hr]
-    [:h2 "Set user user-id"]
-    [:p [:input#input-login {:type :text :placeholder "User-id"}]
-     [:button#btn-login {:type "button"} "Secure login!"]]
+    [:head
+     (include-js "http://public.tableau.com/javascripts/api/tableau-2.0.1.min.js")
+     (include-css "css/page.css")]
+    [:div#tableau-viz]
+    [:div#div-login
+     [:h2 "Set user user-id"]
+     [:p [:input#input-login {:type :text :placeholder "Enter your name:"}]
+      [:button#btn-player1 {:class "login-button" :type "button"} "I'm Player 1"]
+      [:button#btn-player2 {:class "login-button" :type "button"} "I'm Player 2"]]]
+    [:p
+     [:button#btn-hit {:class "game-button" :type "button"} "hit"]
+     [:button#btn-stand {:class "game-button" :type "button"} "stand"]
+     [:button#btn-reset {:class "game-button" :type "button"} "reset"]]
     [:script {:src "js/client.js"}]                         ; Include our cljs target
+
     ))
 
 (defroutes my-routes
@@ -90,13 +96,14 @@
 
 ;;;; Routing handlers
 
-;; So you'll want to define one server-side and one client-side
-;; (fn event-msg-handler [ev-msg]) to correctly handle incoming events. How you
-;; actually do this is entirely up to you. In this example we use a multimethod
-;; that dispatches to a method based on the `event-msg`'s event-id. Some
-;; alternatives include a simple `case`/`cond`/`condp` against event-ids, or
-;; `core.match` against events.
+(defn server->all-users!
+  [message]
+  (doseq [uid (:any @connected-uids)]
+    (when-not (= uid :sente/nil-uid)
+      (chsk-send! uid message))))
 
+(defn broadcast-state! []
+  (server->all-users! [:data15-blackjack/broadcast-state @blackjack/game]))
 
 (defmulti event-msg-handler :id)                            ; Dispatch on event-id
 ;; Wrap for logging, catching, etc.:
@@ -114,9 +121,21 @@
       (when ?reply-fn
         (?reply-fn {:umatched-event-as-echoed-from-from-server event}))))
 
+  (defmethod event-msg-handler :data15-blackjack/click
+    [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
+    (let [session (:session ring-req)
+          uid (:uid session)]
+      (debugf "Initalize request: %s uid: %s data: %s" event uid ?data)
+      (broadcast-state!)))
+
   ;; Add your (defmethod event-msg-handler <event-id> [ev-msg] <body>)s here...
   )
 
+;;;; Some utility
+(defn number-of-connected-users
+  "Number of identified users connected"
+  []
+  (count (filter #(not= :taoensso.sente/nil-uid %) (:any @connected-uids))))
 
 
 ;;;; Init
@@ -145,6 +164,8 @@
   (start-router!)
   (start-web-server!))
 
+; start things from REPL immediately
+(start-router!)
+
 ; in case you start from command line
 (defn -main [& args] (start!))
-
