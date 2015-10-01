@@ -56,6 +56,7 @@
     [:head
      (include-js "http://public.tableau.com/javascripts/api/tableau-2.0.1.min.js")
      (include-css "css/page.css")]
+    [:div#debug]
     [:div#tableau-viz]
     [:div#div-login
      [:h2 "Set user user-id"]

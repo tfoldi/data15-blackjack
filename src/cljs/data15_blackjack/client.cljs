@@ -1,5 +1,6 @@
 (ns data15_blackjack.client
   (:require
+    [data15_blackjack.tableau :as tableau]
     [clojure.string :as str]
     [cljs.core.async :as async :refer (<! >! put! chan)]
     [dommy.core :as dommy :refer-macros [sel sel1]]
@@ -90,7 +91,7 @@
 
   (defmethod event-msg-handler :chsk/recv
     [{:as ev-msg :keys [?data]}]
-    (dommy/set-text! (sel1 :div#tableau-viz) (.toString ?data))
+    (dommy/set-text! (sel1 :div#debug) (.toString ?data))
     (debugf "Push event from server: %s" ?data))
 
   (defmethod event-msg-handler :chsk/handshake
