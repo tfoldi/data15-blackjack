@@ -63,7 +63,7 @@
      [:p [:input#input-login {:type :text :placeholder "Enter your name:"}]
       [:button#btn-player1 {:class "login-button" :type "button"} "I'm Player 1"]
       [:button#btn-player2 {:class "login-button" :type "button"} "I'm Player 2"]]]
-    [:p
+    [:p#game-buttons
      [:button#btn-hit {:class "game-button" :type "button"} "hit"]
      [:button#btn-stand {:class "game-button" :type "button"} "stand"]
      [:button#btn-reset {:class "game-button" :type "button"} "new"]]
@@ -124,13 +124,13 @@
 
   (defmethod event-msg-handler :data15-blackjack/click
     [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
-    (let [session (:session ring-req)
-          uid (:uid session)]
+    (let [{:keys [uid role]} (:session ring-req)]
       (debugf "Initalize request: %s uid: %s data: %s" event uid ?data)
       (condp = ?data
+        "load" nil
         "reset" (blackjack/start-game)
-        "stand" (blackjack/stand (get session :role))
-        "hit" (blackjack/hit-me (get session :role)))
+        "stand" (blackjack/stand role)
+        "hit" (blackjack/hit-me role))
       (broadcast-state!)))
 
   ;; Add your (defmethod event-msg-handler <event-id> [ev-msg] <body>)s here...

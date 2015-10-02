@@ -1,6 +1,6 @@
 (ns data15_blackjack.client
   (:require
-    [data15_blackjack.tableau :as tableau]
+    [data15-blackjack.tableau :as tableau]
     [clojure.string :as str]
     [cljs.core.async :as async :refer (<! >! put! chan)]
     [dommy.core :as dommy :refer-macros [sel sel1]]
@@ -72,6 +72,11 @@
 
 ;;;; Message handlers
 
+(add-watch tableau/viz :ui
+           (fn [key atom old-state new-state]
+             (when (= :viz-ready (new-state :status))
+               (chsk-send! [:data15-blackjack/click "load"]))))
+
 (defmulti event-msg-handler :id)                            ; Dispatch on event-id
 ;; Wrap for logging, catching, etc.:
 (defn event-msg-handler* [{:as ev-msg :keys [id ?data event]}]
@@ -91,7 +96,7 @@
 
   (defmethod event-msg-handler :chsk/recv
     [{:as ev-msg :keys [?data]}]
-    (dommy/set-text! (sel1 :div#debug) (.toString ?data))
+    (tableau/update-tableau (get @chsk-state :uid) (second ?data))
     (debugf "Push event from server: %s" ?data))
 
   (defmethod event-msg-handler :chsk/handshake
@@ -100,9 +105,7 @@
       (debugf "Handshake: %s" ?data)
       (let [logged-in? (not= ?uid :taoensso.sente/nil-uid)]
         (show-game-buttons! logged-in?)
-        (show-login! (not logged-in?)))))
-
-  )
+        (show-login! (not logged-in?))))))
 
 
 ;;;; Routers & Initalization

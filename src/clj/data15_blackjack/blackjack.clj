@@ -1,16 +1,16 @@
 (ns data15-blackjack.blackjack)
 
-(def game (atom {:deck             (into [] (shuffle (range 0 52)))
-                 :dealer-hand      []
-                 :dealer-status    nil
-                 :player1-hand     []
-                 :player1-name     nil
-                 :player2-hand     []
-                 :player2-name     nil
-                 :player1-status   :na
-                 :player2-status   :na
-                 :player1-feedback ""
-                 :player2-feeback  ""}))
+(defonce game (atom {:deck             (into [] (shuffle (range 0 52)))
+                     :dealer-hand      []
+                     :dealer-status    nil
+                     :player1-hand     []
+                     :player1-name     nil
+                     :player2-hand     []
+                     :player2-name     nil
+                     :player1-status   :na
+                     :player2-status   :na
+                     :player1-feedback ""
+                     :player2-feeback  ""}))
 
 ;; UTILITIES
 (defn- other-player
@@ -83,13 +83,13 @@
                   :else :bust)])))
 
 (defn immediate-win
-  "Given player hand and dealer hand, return true if someone
-  has blackjack, false otherwise."
+  "Given players hand and dealer hand, return true if dealer
+  has blackjack, players have blackjack, false otherwise."
   [dealer-hand player1-hand player2-hand]
   (let [[p1total _] (evaluate-hand player1-hand)
         [p2total _] (evaluate-hand player2-hand)
         [dtotal _] (evaluate-hand dealer-hand)]
-    (or (= p1total 21) (= p2total 21) (= dtotal 21))))
+    (or (and (= p1total 21) (= p2total 21)) (= dtotal 21))))
 
 (defn reveal
   "This function takes a player's hand and returns a new hand
@@ -109,7 +109,7 @@
   (let [[ptotal pstatus] (evaluate-hand player-hand)
         [dtotal dstatus] (evaluate-hand dealer-hand)]
     (cond
-      (> ptotal 21) (feedback player "Sorry, you busted.")
+      (> ptotal 21) (feedback player "Sorry, you are busted.")
       (> dtotal 21) (feedback player "Dealer goes bust. You win!")
       (= ptotal dtotal) (feedback player "Tie game.")
       (= pstatus :blackjack) (feedback player "You win with blackjack!")
@@ -134,7 +134,7 @@
         ]
     (swap! game assoc :playing true :discard-pile pile-after-deal :player1-hand player1-2
            :player2-hand player2-2 :dealer-hand dealer2 :deck deck4
-           :player1-feedback "" :player2-feeback ""
+           :player1-feedback "" :player2-feedback ""
            :player1-status (evaluate-hand player1-2)
            :player2-status (evaluate-hand player2-2)
            :dealer-status nil

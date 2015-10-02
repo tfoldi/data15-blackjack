@@ -20818,6 +20818,46 @@ data15_blackjack.tableau.get_vizobj = function() {
   return cljs.core.get.call(null, cljs.core.deref.call(null, data15_blackjack.tableau.viz), new cljs.core.Keyword(null, "vizobj", "vizobj", 592556094));
 };
 cljs.core.swap_BANG_.call(null, data15_blackjack.tableau.viz, cljs.core.assoc, new cljs.core.Keyword(null, "status", "status", -1997798413), new cljs.core.Keyword(null, "initalize", "initalize", -1634915291), new cljs.core.Keyword(null, "vizobj", "vizobj", 592556094), new tableau.Viz(data15_blackjack.tableau.placeholder_div, data15_blackjack.tableau.viz_url, data15_blackjack.tableau.viz_options));
+data15_blackjack.tableau.workbook = function() {
+  return cljs.core.get.call(null, cljs.core.deref.call(null, data15_blackjack.tableau.viz), new cljs.core.Keyword(null, "vizobj", "vizobj", 592556094)).getWorkbook();
+};
+data15_blackjack.tableau.get_sheet_in_active_sheet = function(a) {
+  return data15_blackjack.tableau.workbook.call(null).getActiveSheet().getWorksheets().get(a);
+};
+data15_blackjack.tableau.filter_update = function(a, b, c) {
+  return data15_blackjack.tableau.get_sheet_in_active_sheet.call(null, a).applyFilterAsync(b, cljs.core.clj__GT_js.call(null, c), tableau.FilterUpdateType.REPLACE);
+};
+data15_blackjack.tableau.parameter_update = function(a, b, c) {
+  return a.changeParameterValueAsync(b, cljs.core.clj__GT_js.call(null, c));
+};
+data15_blackjack.tableau.pad_with_blank_cards = function(a) {
+  var b = cljs.core.count.call(null, a);
+  return cljs.core.concat.call(null, a, cljs.core.take.call(null, 5 - b, new cljs.core.PersistentVector(null, 5, 5, cljs.core.PersistentVector.EMPTY_NODE, [452, 352, 252, 152, 52], null)));
+};
+data15_blackjack.tableau.update_cards = function(a, b) {
+  return data15_blackjack.tableau.filter_update.call(null, a, "Location-ID", data15_blackjack.tableau.pad_with_blank_cards.call(null, b));
+};
+data15_blackjack.tableau.get_cards = function(a) {
+  return cljs.core.doall.call(null, cljs.core.map_indexed.call(null, function(a, c) {
+    var d = cljs.core.nth.call(null, c, 0, null), e = cljs.core.nth.call(null, c, 1, null);
+    return cljs.core._EQ_.call(null, e, new cljs.core.Keyword(null, "down", "down", 1565245570)) ? 99 : 100 * a + d;
+  }, a));
+};
+data15_blackjack.tableau.update_tableau = function(a, b) {
+  var c = null != b && (b.cljs$lang$protocol_mask$partition0$ & 64 || b.cljs$core$ISeq$) ? cljs.core.apply.call(null, cljs.core.hash_map, b) : b, d = cljs.core.get.call(null, c, new cljs.core.Keyword(null, "player1-name", "player1-name", -36643011)), e = cljs.core.get.call(null, c, new cljs.core.Keyword(null, "player2-name", "player2-name", 805729602)), f = cljs.core.get.call(null, c, new cljs.core.Keyword(null, "player1-status", "player1-status", -1788985107)), g = cljs.core.get.call(null, c, new cljs.core.Keyword(null, 
+  "player2-status", "player2-status", -1674009200)), h = cljs.core.get.call(null, c, new cljs.core.Keyword(null, "dealer-hand", "dealer-hand", 1449607832)), k = cljs.core.get.call(null, c, new cljs.core.Keyword(null, "player1-hand", "player1-hand", -1801919766)), l = cljs.core.get.call(null, c, new cljs.core.Keyword(null, "player2-hand", "player2-hand", -977640025)), m = cljs.core.get.call(null, c, new cljs.core.Keyword(null, "player1-feedback", "player1-feedback", -1987792675)), c = cljs.core.get.call(null, 
+  c, new cljs.core.Keyword(null, "player2-feedback", "player2-feedback", 844322540));
+  data15_blackjack.tableau.parameter_update.call(null, data15_blackjack.tableau.workbook.call(null), "player1-name", cljs.core.truth_(d) ? d : "Player2");
+  data15_blackjack.tableau.parameter_update.call(null, data15_blackjack.tableau.workbook.call(null), "player2-name", cljs.core.truth_(e) ? e : "Player1");
+  data15_blackjack.tableau.parameter_update.call(null, data15_blackjack.tableau.workbook.call(null), "player1-score", cljs.core.first.call(null, f));
+  data15_blackjack.tableau.parameter_update.call(null, data15_blackjack.tableau.workbook.call(null), "player2-score", cljs.core.first.call(null, g));
+  data15_blackjack.tableau.update_cards.call(null, "Dealer", data15_blackjack.tableau.get_cards.call(null, h));
+  if (cljs.core._EQ_.call(null, a, d)) {
+    return data15_blackjack.tableau.parameter_update.call(null, data15_blackjack.tableau.workbook.call(null), "feedback", m), data15_blackjack.tableau.update_cards.call(null, "Player", data15_blackjack.tableau.get_cards.call(null, k));
+  }
+  data15_blackjack.tableau.parameter_update.call(null, data15_blackjack.tableau.workbook.call(null), "feedback", c);
+  return data15_blackjack.tableau.update_cards.call(null, "Player", data15_blackjack.tableau.get_cards.call(null, l));
+};
 goog.labs = {};
 goog.labs.userAgent = {};
 goog.labs.userAgent.util = {};
@@ -36421,13 +36461,13 @@ taoensso.sente.set_logging_level_BANG_.call(null, new cljs.core.Keyword(null, "t
 taoensso.timbre.log1_fn.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "debug", "debug", -1608172596), "data15_blackjack.client", "C:\\Users\\tfoldi\\AppData\\Local\\Temp\\form-init273359133103822750.clj", null, new cljs.core.Keyword(null, "f", "f", -1597136552), new cljs.core.Delay(function() {
   return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["ClojureScript appears to have loaded correctly."], null);
 }, null), null);
-var map__19504_19506 = taoensso.sente.make_channel_socket_BANG_.call(null, "/chsk", new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Keyword(null, "packer", "packer", 66077544), new cljs.core.Keyword(null, "edn", "edn", 1317840885)], null)), map__19504_19507__$1 = null != map__19504_19506 && (map__19504_19506.cljs$lang$protocol_mask$partition0$ & 64 || map__19504_19506.cljs$core$ISeq$) ? 
-cljs.core.apply.call(null, cljs.core.hash_map, map__19504_19506) : map__19504_19506, chsk_19508 = cljs.core.get.call(null, map__19504_19507__$1, new cljs.core.Keyword(null, "chsk", "chsk", -863703081)), ch_recv_19509 = cljs.core.get.call(null, map__19504_19507__$1, new cljs.core.Keyword(null, "ch-recv", "ch-recv", -990916861)), send_fn_19510 = cljs.core.get.call(null, map__19504_19507__$1, new cljs.core.Keyword(null, "send-fn", "send-fn", 351002041)), state_19511 = cljs.core.get.call(null, map__19504_19507__$1, 
+var map__23813_23815 = taoensso.sente.make_channel_socket_BANG_.call(null, "/chsk", new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Keyword(null, "packer", "packer", 66077544), new cljs.core.Keyword(null, "edn", "edn", 1317840885)], null)), map__23813_23816__$1 = null != map__23813_23815 && (map__23813_23815.cljs$lang$protocol_mask$partition0$ & 64 || map__23813_23815.cljs$core$ISeq$) ? 
+cljs.core.apply.call(null, cljs.core.hash_map, map__23813_23815) : map__23813_23815, chsk_23817 = cljs.core.get.call(null, map__23813_23816__$1, new cljs.core.Keyword(null, "chsk", "chsk", -863703081)), ch_recv_23818 = cljs.core.get.call(null, map__23813_23816__$1, new cljs.core.Keyword(null, "ch-recv", "ch-recv", -990916861)), send_fn_23819 = cljs.core.get.call(null, map__23813_23816__$1, new cljs.core.Keyword(null, "send-fn", "send-fn", 351002041)), state_23820 = cljs.core.get.call(null, map__23813_23816__$1, 
 new cljs.core.Keyword(null, "state", "state", -1988618099));
-data15_blackjack.client.chsk = chsk_19508;
-data15_blackjack.client.ch_chsk = ch_recv_19509;
-data15_blackjack.client.chsk_send_BANG_ = send_fn_19510;
-data15_blackjack.client.chsk_state = state_19511;
+data15_blackjack.client.chsk = chsk_23817;
+data15_blackjack.client.ch_chsk = ch_recv_23818;
+data15_blackjack.client.chsk_send_BANG_ = send_fn_23819;
+data15_blackjack.client.chsk_state = state_23820;
 data15_blackjack.client.unbuttonize = function(a) {
   return clojure.string.replace.call(null, a.toElement.id, "btn-", "");
 };
@@ -36456,50 +36496,50 @@ data15_blackjack.client.login_event_handler = function(a) {
     };
   }(b));
 };
-for (var seq__19512_19516 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("login-button"))), chunk__19513_19517 = null, count__19514_19518 = 0, i__19515_19519 = 0;;) {
-  if (i__19515_19519 < count__19514_19518) {
-    var button_19520 = cljs.core._nth.call(null, chunk__19513_19517, i__19515_19519);
-    dommy.core.listen_BANG_.call(null, button_19520, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
-    var G__19521 = seq__19512_19516, G__19522 = chunk__19513_19517, G__19523 = count__19514_19518, G__19524 = i__19515_19519 + 1, seq__19512_19516 = G__19521, chunk__19513_19517 = G__19522, count__19514_19518 = G__19523, i__19515_19519 = G__19524;
+for (var seq__23821_23825 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("login-button"))), chunk__23822_23826 = null, count__23823_23827 = 0, i__23824_23828 = 0;;) {
+  if (i__23824_23828 < count__23823_23827) {
+    var button_23829 = cljs.core._nth.call(null, chunk__23822_23826, i__23824_23828);
+    dommy.core.listen_BANG_.call(null, button_23829, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
+    var G__23830 = seq__23821_23825, G__23831 = chunk__23822_23826, G__23832 = count__23823_23827, G__23833 = i__23824_23828 + 1, seq__23821_23825 = G__23830, chunk__23822_23826 = G__23831, count__23823_23827 = G__23832, i__23824_23828 = G__23833;
   } else {
-    var temp__4425__auto___19525 = cljs.core.seq.call(null, seq__19512_19516);
-    if (temp__4425__auto___19525) {
-      var seq__19512_19526__$1 = temp__4425__auto___19525;
-      if (cljs.core.chunked_seq_QMARK_.call(null, seq__19512_19526__$1)) {
-        var c__5366__auto___19527 = cljs.core.chunk_first.call(null, seq__19512_19526__$1), G__19528 = cljs.core.chunk_rest.call(null, seq__19512_19526__$1), G__19529 = c__5366__auto___19527, G__19530 = cljs.core.count.call(null, c__5366__auto___19527), G__19531 = 0, seq__19512_19516 = G__19528, chunk__19513_19517 = G__19529, count__19514_19518 = G__19530, i__19515_19519 = G__19531
+    var temp__4425__auto___23834 = cljs.core.seq.call(null, seq__23821_23825);
+    if (temp__4425__auto___23834) {
+      var seq__23821_23835__$1 = temp__4425__auto___23834;
+      if (cljs.core.chunked_seq_QMARK_.call(null, seq__23821_23835__$1)) {
+        var c__5366__auto___23836 = cljs.core.chunk_first.call(null, seq__23821_23835__$1), G__23837 = cljs.core.chunk_rest.call(null, seq__23821_23835__$1), G__23838 = c__5366__auto___23836, G__23839 = cljs.core.count.call(null, c__5366__auto___23836), G__23840 = 0, seq__23821_23825 = G__23837, chunk__23822_23826 = G__23838, count__23823_23827 = G__23839, i__23824_23828 = G__23840
       } else {
-        var button_19532 = cljs.core.first.call(null, seq__19512_19526__$1);
-        dommy.core.listen_BANG_.call(null, button_19532, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
-        var G__19533 = cljs.core.next.call(null, seq__19512_19526__$1), G__19534 = null, G__19535 = 0, G__19536 = 0, seq__19512_19516 = G__19533, chunk__19513_19517 = G__19534, count__19514_19518 = G__19535, i__19515_19519 = G__19536;
+        var button_23841 = cljs.core.first.call(null, seq__23821_23835__$1);
+        dommy.core.listen_BANG_.call(null, button_23841, new cljs.core.Keyword(null, "click", "click", 1912301393), data15_blackjack.client.login_event_handler);
+        var G__23842 = cljs.core.next.call(null, seq__23821_23835__$1), G__23843 = null, G__23844 = 0, G__23845 = 0, seq__23821_23825 = G__23842, chunk__23822_23826 = G__23843, count__23823_23827 = G__23844, i__23824_23828 = G__23845;
       }
     } else {
       break;
     }
   }
 }
-for (var seq__19537_19541 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("game-button"))), chunk__19538_19542 = null, count__19539_19543 = 0, i__19540_19544 = 0;;) {
-  if (i__19540_19544 < count__19539_19543) {
-    var button_19545 = cljs.core._nth.call(null, chunk__19538_19542, i__19540_19544);
-    dommy.core.listen_BANG_.call(null, button_19545, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e) {
+for (var seq__23846_23850 = cljs.core.seq.call(null, dommy.utils.__GT_Array.call(null, document.getElementsByClassName("game-button"))), chunk__23847_23851 = null, count__23848_23852 = 0, i__23849_23853 = 0;;) {
+  if (i__23849_23853 < count__23848_23852) {
+    var button_23854 = cljs.core._nth.call(null, chunk__23847_23851, i__23849_23853);
+    dommy.core.listen_BANG_.call(null, button_23854, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e) {
       return function(a) {
         return data15_blackjack.client.chsk_send_BANG_.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("data15-blackjack", "click", "data15-blackjack/click", 1073928180), data15_blackjack.client.unbuttonize.call(null, a)], null));
       };
-    }(seq__19537_19541, chunk__19538_19542, count__19539_19543, i__19540_19544, button_19545));
-    var G__19546 = seq__19537_19541, G__19547 = chunk__19538_19542, G__19548 = count__19539_19543, G__19549 = i__19540_19544 + 1, seq__19537_19541 = G__19546, chunk__19538_19542 = G__19547, count__19539_19543 = G__19548, i__19540_19544 = G__19549;
+    }(seq__23846_23850, chunk__23847_23851, count__23848_23852, i__23849_23853, button_23854));
+    var G__23855 = seq__23846_23850, G__23856 = chunk__23847_23851, G__23857 = count__23848_23852, G__23858 = i__23849_23853 + 1, seq__23846_23850 = G__23855, chunk__23847_23851 = G__23856, count__23848_23852 = G__23857, i__23849_23853 = G__23858;
   } else {
-    var temp__4425__auto___19550 = cljs.core.seq.call(null, seq__19537_19541);
-    if (temp__4425__auto___19550) {
-      var seq__19537_19551__$1 = temp__4425__auto___19550;
-      if (cljs.core.chunked_seq_QMARK_.call(null, seq__19537_19551__$1)) {
-        var c__5366__auto___19552 = cljs.core.chunk_first.call(null, seq__19537_19551__$1), G__19553 = cljs.core.chunk_rest.call(null, seq__19537_19551__$1), G__19554 = c__5366__auto___19552, G__19555 = cljs.core.count.call(null, c__5366__auto___19552), G__19556 = 0, seq__19537_19541 = G__19553, chunk__19538_19542 = G__19554, count__19539_19543 = G__19555, i__19540_19544 = G__19556
+    var temp__4425__auto___23859 = cljs.core.seq.call(null, seq__23846_23850);
+    if (temp__4425__auto___23859) {
+      var seq__23846_23860__$1 = temp__4425__auto___23859;
+      if (cljs.core.chunked_seq_QMARK_.call(null, seq__23846_23860__$1)) {
+        var c__5366__auto___23861 = cljs.core.chunk_first.call(null, seq__23846_23860__$1), G__23862 = cljs.core.chunk_rest.call(null, seq__23846_23860__$1), G__23863 = c__5366__auto___23861, G__23864 = cljs.core.count.call(null, c__5366__auto___23861), G__23865 = 0, seq__23846_23850 = G__23862, chunk__23847_23851 = G__23863, count__23848_23852 = G__23864, i__23849_23853 = G__23865
       } else {
-        var button_19557 = cljs.core.first.call(null, seq__19537_19551__$1);
-        dommy.core.listen_BANG_.call(null, button_19557, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e, f, g) {
+        var button_23866 = cljs.core.first.call(null, seq__23846_23860__$1);
+        dommy.core.listen_BANG_.call(null, button_23866, new cljs.core.Keyword(null, "click", "click", 1912301393), function(a, b, c, d, e, f, g) {
           return function(a) {
             return data15_blackjack.client.chsk_send_BANG_.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("data15-blackjack", "click", "data15-blackjack/click", 1073928180), data15_blackjack.client.unbuttonize.call(null, a)], null));
           };
-        }(seq__19537_19541, chunk__19538_19542, count__19539_19543, i__19540_19544, button_19557, seq__19537_19551__$1, temp__4425__auto___19550));
-        var G__19558 = cljs.core.next.call(null, seq__19537_19551__$1), G__19559 = null, G__19560 = 0, G__19561 = 0, seq__19537_19541 = G__19558, chunk__19538_19542 = G__19559, count__19539_19543 = G__19560, i__19540_19544 = G__19561;
+        }(seq__23846_23850, chunk__23847_23851, count__23848_23852, i__23849_23853, button_23866, seq__23846_23860__$1, temp__4425__auto___23859));
+        var G__23867 = cljs.core.next.call(null, seq__23846_23860__$1), G__23868 = null, G__23869 = 0, G__23870 = 0, seq__23846_23850 = G__23867, chunk__23847_23851 = G__23868, count__23848_23852 = G__23869, i__23849_23853 = G__23870;
       }
     } else {
       break;
@@ -36524,6 +36564,9 @@ data15_blackjack.client.show_game_buttons_BANG_ = function(a) {
 data15_blackjack.client.show_login_BANG_ = function(a) {
   return dommy.core.toggle_BANG_.call(null, document.getElementById("div-login"), a);
 };
+cljs.core.add_watch.call(null, data15_blackjack.tableau.viz, new cljs.core.Keyword(null, "ui", "ui", -469653645), function(a, b, c, d) {
+  return cljs.core._EQ_.call(null, new cljs.core.Keyword(null, "viz-ready", "viz-ready", -338336404), d.call(null, new cljs.core.Keyword(null, "status", "status", -1997798413))) ? data15_blackjack.client.chsk_send_BANG_.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("data15-blackjack", "click", "data15-blackjack/click", 1073928180), "load"], null)) : null;
+});
 "undefined" === typeof data15_blackjack.client.event_msg_handler && (data15_blackjack.client.event_msg_handler = function() {
   var a = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY), b = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY), c = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY), d = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY), e = cljs.core.get.call(null, cljs.core.PersistentArrayMap.EMPTY, new cljs.core.Keyword(null, "hierarchy", "hierarchy", -1053470341), cljs.core.get_global_hierarchy.call(null));
   return new cljs.core.MultiFn(cljs.core.symbol.call(null, "data15_blackjack.client", "event-msg-handler"), new cljs.core.Keyword(null, "id", "id", -1388402092), new cljs.core.Keyword(null, "default", "default", -1987822328), e, a, b, c, d);
@@ -36559,7 +36602,7 @@ cljs.core._add_method.call(null, data15_blackjack.client.event_msg_handler, new 
 });
 cljs.core._add_method.call(null, data15_blackjack.client.event_msg_handler, new cljs.core.Keyword("chsk", "recv", "chsk/recv", 561097091), function(a) {
   var b = null != a && (a.cljs$lang$protocol_mask$partition0$ & 64 || a.cljs$core$ISeq$) ? cljs.core.apply.call(null, cljs.core.hash_map, a) : a, c = cljs.core.get.call(null, b, new cljs.core.Keyword(null, "?data", "?data", -9471433));
-  dommy.core.set_text_BANG_.call(null, document.querySelector("div#debug"), c.toString());
+  data15_blackjack.tableau.update_tableau.call(null, cljs.core.get.call(null, cljs.core.deref.call(null, data15_blackjack.client.chsk_state), new cljs.core.Keyword(null, "uid", "uid", -1447769400)), cljs.core.second.call(null, c));
   return taoensso.timbre.log1_fn.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "debug", "debug", -1608172596), "data15_blackjack.client", "C:\\Users\\tfoldi\\AppData\\Local\\Temp\\form-init273359133103822750.clj", null, new cljs.core.Keyword(null, "f", "f", -1597136552), new cljs.core.Delay(function(a, b, c, g) {
     return function() {
       return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["Push event from server: %s", g], null);
