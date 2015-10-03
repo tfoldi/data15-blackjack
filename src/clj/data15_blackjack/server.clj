@@ -26,13 +26,10 @@
      :port    (:local-port (meta http-kit-stop-fn))
      :stop-fn (fn [] (http-kit-stop-fn :timeout 100))}))
 
-;;;; Packer (client<->server serializtion format) config
-(def packer :edn)
-
 ;;;; Server-side setup
 (let [{:keys [ch-recv send-fn ajax-post-fn ajax-get-or-ws-handshake-fn
               connected-uids]}
-      (sente/make-channel-socket! sente-web-server-adapter {:packer packer})]
+      (sente/make-channel-socket! sente-web-server-adapter {:packer :edn})]
   (def ring-ajax-post ajax-post-fn)
   (def ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn)
   (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
@@ -99,11 +96,13 @@
 
 (defn server->all-users!
   [message]
+  "Send message to all connected, authenticated users"
   (doseq [uid (:any @connected-uids)]
     (when-not (= uid :sente/nil-uid)
       (chsk-send! uid message))))
 
 (defn broadcast-state! []
+  "Broadcast state: send blackjack game's state to connected users"
   (server->all-users! [:data15-blackjack/broadcast-state @blackjack/game]))
 
 (defmulti event-msg-handler :id)                            ; Dispatch on event-id

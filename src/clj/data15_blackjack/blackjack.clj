@@ -1,4 +1,5 @@
-(ns data15-blackjack.blackjack)
+(ns data15-blackjack.blackjack
+  (:require [cljc.data15-blackjack.utils :refer [other-player keywordize]]))
 
 (defonce game (atom {:deck             (into [] (shuffle (range 0 52)))
                      :dealer-hand      []
@@ -11,19 +12,6 @@
                      :player2-status   :na
                      :player1-feedback ""
                      :player2-feeback  ""}))
-
-;; UTILITIES
-(defn- other-player
-  "Refer to the other player's id"
-  [player]
-  (if (= (name player) "player1")
-    :player2
-    :player1))
-
-(defn- keywordize
-  "Create keyword like :player1-hand from `player1` and `hand`"
-  [player postfix]
-  (keyword (str (name player) "-" (name postfix))))
 
 (defn set-player-name!
   "Set player name and ensure that one player has only one

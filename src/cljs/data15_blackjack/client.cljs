@@ -66,9 +66,13 @@
   (doseq [button (sel :.game-button)]
     (dommy/toggle! button show?)))
 
+(defn show-tableau-viz!
+  [show?]
+  (dommy/toggle! (sel1 :div#tableau-viz) show?))
+
 (defn show-login!
   [show?]
-  (dommy/toggle! (sel1 :#div-login) show?))
+  (dommy/toggle! (sel1 :div#div-login) show?))
 
 ;;;; Message handlers
 
@@ -105,6 +109,7 @@
       (debugf "Handshake: %s" ?data)
       (let [logged-in? (not= ?uid :taoensso.sente/nil-uid)]
         (show-game-buttons! logged-in?)
+        (show-tableau-viz! logged-in?)
         (show-login! (not logged-in?))))))
 
 

@@ -28,14 +28,15 @@
   :plugins [[lein-cljsbuild "1.1.0"]
             [lein-pprint "1.1.2"]
             [lein-ancient "0.6.7"]
+            [michaelblume/lein-marginalia "0.9.0"]
             [com.cemerick/austin "0.1.6"]
             [lein-ring "0.9.7"]]
   :hooks [leiningen.cljsbuild]
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "src/cljc"]
   :cljsbuild {
               :builds {
                        :main {
-                              :source-paths ["src/cljs"]
+                              :source-paths ["src/cljs" "src/cljc"]
                               :compiler     {:output-to     "resources/public/js/client.js"
                                              :optimizations :simple
                                              :pretty-print  true}
