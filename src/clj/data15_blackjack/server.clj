@@ -36,6 +36,10 @@
   (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
   (def connected-uids connected-uids))                      ; Watchable, read-only atom
 
+(defn number-of-connected-users
+  "Number of identified users connected"
+  []
+  (count (filter #(not= :taoensso.sente/nil-uid %) (:any @connected-uids))))
 
 (defn login!
   "Login methods sets the user name. No real login, just associate the username with
@@ -128,18 +132,13 @@
       (condp = ?data
         "load" nil
         "reset" (blackjack/start-game)
-        "stand" (blackjack/stand role)
+        "stand" (blackjack/stand role (number-of-connected-users))
         "hit" (blackjack/hit-me role))
       (broadcast-state!)))
 
   ;; Add your (defmethod event-msg-handler <event-id> [ev-msg] <body>)s here...
   )
 
-;;;; Some utility
-(defn number-of-connected-users
-  "Number of identified users connected"
-  []
-  (count (filter #(not= :taoensso.sente/nil-uid %) (:any @connected-uids))))
 
 
 ;;;; Init

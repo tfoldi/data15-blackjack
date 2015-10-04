@@ -153,20 +153,27 @@
   "Player is satisfied with hand. Reveal the dealer's hand,
   then deal cards one at a time until the dealer has to stand
   or goes bust."
-  [player]
-  (let [{:keys [deck dealer-hand player1-hand player2-hand discard-pile]} @game
-        dhand (reveal dealer-hand)]
-    (swap! game assoc :dealer-hand dhand)
-    (loop [loop-deck deck
-           loop-hand dhand
-           loop-pile discard-pile]
-      (let [[total status] (evaluate-hand loop-hand)]
-        (if (or (= status :bust) (>= total 17))
-          (do
-            (swap! game assoc :dealer-hand loop-hand :dealer-status [total status])
-            (end-game loop-hand player1-hand :player1)
-            (end-game loop-hand player2-hand :player2))
-          (let [[new-deck new-hand new-discard] (deal [loop-deck loop-hand loop-pile] :up)]
-            (swap! game assoc :dealer-hand new-hand)
-            (recur new-deck new-hand new-discard)))))))
+  [role num-players]
+  (swap! game assoc-in [(keywordize role :status) 2] :stand)
+  (if (and (= num-players 2) (not= (get-in @game
+                                           [(keywordize (other-player role) :status) 2])
+                                   :stand))
+    ; Other player is still playing
+    (swap! game assoc (keywordize role :feedback) "Waiting for other player to stand.")
+    ; We are done
+    (let [{:keys [deck dealer-hand player1-hand player2-hand discard-pile]} @game
+          dhand (reveal dealer-hand)]
+      (swap! game assoc :dealer-hand dhand)
+      (loop [loop-deck deck
+             loop-hand dhand
+             loop-pile discard-pile]
+        (let [[total status] (evaluate-hand loop-hand)]
+          (if (or (= status :bust) (>= total 17))
+            (do
+              (swap! game assoc :dealer-hand loop-hand :dealer-status [total status])
+              (end-game loop-hand player1-hand :player1)
+              (end-game loop-hand player2-hand :player2))
+            (let [[new-deck new-hand new-discard] (deal [loop-deck loop-hand loop-pile] :up)]
+              (swap! game assoc :dealer-hand new-hand)
+              (recur new-deck new-hand new-discard))))))))
 
