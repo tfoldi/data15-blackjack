@@ -1,30 +1,28 @@
 (ns data15-blackjack.blackjack
-  (:require [cljc.data15-blackjack.utils :refer [other-player keywordize]]))
+  (:require [data15-blackjack.utils :refer [other-player keywordize]]))
 
-(defonce game (atom {:deck             (into [] (shuffle (range 0 52)))
-                     :dealer-hand      []
-                     :dealer-status    nil
-                     :player1-hand     []
-                     :player1-name     nil
-                     :player2-hand     []
-                     :player2-name     nil
-                     :player1-status   :na
-                     :player2-status   :na
-                     :player1-feedback ""
-                     :player2-feeback  ""}))
+(def game (atom {:deck             (into [] (shuffle (range 0 52)))
+                 :dealer-hand      []
+                 :dealer-status    nil
+                 :player1-hand     []
+                 :player1-name     nil
+                 :player2-hand     []
+                 :player2-name     nil
+                 :player1-status   [0 :na]
+                 :player2-status   [0 :na]
+                 :player1-feedback ""
+                 :player2-feeback  ""}))
 
 (defn set-player-name!
   "Set player name and ensure that one player has only one
   user id"
   [player name]
-  (when (= (@game (keywordize (other-player player) :name)) name)
+  (when (= (get @game (keywordize (other-player player) :name)) name)
     ;; Log out other player if the user-id is the same
     (swap! game assoc
-           (keywordize (other-player player) :name) nil
-           (keywordize (other-player player) :status) :na))
+           (keywordize (other-player player) :name) nil))
   (swap! game assoc
-         (keywordize player :name) name
-         (keywordize player :status) :signed))
+         (keywordize player :name) name))
 
 
 ;; GAME
@@ -61,7 +59,7 @@
 
 (defn evaluate-hand
   "Get total value of hand. Return a vector with total and
-  the status (:ok, :blackjack, :bust)"
+  the status `(:ok, :blackjack, :bust, :stand)`"
   [hand]
   (let [[pre-total ace-value] (reduce accumulate-value [0 11] hand)
         total (if (and (> pre-total 21) (= ace-value 1)) (- pre-total 10) pre-total)]

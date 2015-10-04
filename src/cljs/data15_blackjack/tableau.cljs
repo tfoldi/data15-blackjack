@@ -8,53 +8,73 @@
   (atom {:status :not-loaded :vizobj nil}))
 
 (def viz-url
-  "The public URL of the tableau viz"
+  "The public URL of the tableau viz."
   "https://public.tableau.com/views/Blackjack/BlackjackTableau")
 
 (def placeholder-div
-  "tableau viz's DOM element"
+  "Tableau viz's div element. This is where the visualization will go"
   (sel1 :div#tableau-viz))
 
 ;
 (def viz-options
-  "Hide things from the embedded viz"
+  "Javascript object to interface with `Viz` constructor. Hide tabs & toolbars.
+  After initalizing the Viz change `:status` to `:viz-ready` in our `viz` atom.
+  The clint UI watch this atom: when the status change the dom node will be visible
+  to the gamer."
   (js-obj
     "hideTabs" true
     "hideToolbar" true
     "onFirstInteractive" #(swap! viz assoc :status :viz-ready)))
 
-; Initialize viz and store it in viz atom
+;; Initialize our visualization with `viz-options` and store it in `viz` atom.
+;; This `swap!` will trigger the watcher defined in `client.cljs` to show the
+;; dom element.
 (swap! viz assoc :status :initalize :vizobj
        (js/tableau.Viz. placeholder-div viz-url viz-options))
 
-(defn workbook [] (.getWorkbook (get @viz :vizobj)))
+(defn workbook
+  "Get the `Workbook` object from the previously created viz."
+  [] (.getWorkbook (get @viz :vizobj)))
 
-(defn get-sheet-in-active-sheet [sheet]
+(defn get-sheet-in-active-sheet
+  "Get the `Sheet` object from the active sheet. Active sheet must be a `Dashboard`"
+  [sheet]
   (-> (workbook)
       (.getActiveSheet)
       (.getWorksheets)
       (.get sheet)))
 
-(defn filter-update [sheet key values]
+(defn filter-update
+  "Filter supplied `values` for `key` on `sheet`. Filter change is asynchronous.
+  Values can be CLJS or JS values and sequences."
+  [sheet key values]
   (-> (get-sheet-in-active-sheet sheet)
       (.applyFilterAsync key (clj->js values) js/tableau.FilterUpdateType.REPLACE)))
 
-(defn parameter-update [workbook key value]
+(defn parameter-update
+  "Update `key` parameter to `value` in `workbook`."
+  [workbook key value]
   (.changeParameterValueAsync workbook key (clj->js value)))
 
 
 (defn pad-with-blank-cards
+  "We show always five cards for the players. If the player has less then
+  five cards then we are padding his hand with \"empty\" cards. Empty cards
+   are the ones with ID=52. Thus, `Location-ID=452` stands for empty card on
+   fifth position."
   [cards]
   (let [num-cards (count cards)]
     (concat cards (take (- 5 num-cards) [452 352 252 152 52]))))
 
-(defn update-cards [sheet cards]
+(defn update-cards
+  "Show hand in `sheet`, padded with empty cards to show at least five of them."
+  [sheet cards]
   (filter-update sheet "Location-ID" (pad-with-blank-cards cards)))
 
 (defn get-cards
-  [hand]
   "Calculate cards unique ID in tableau. Basic calculation is: `99` for all face
   down cards, otherwise position in hand * 100 + card id."
+  [hand]
   (doall (map-indexed
            (fn [idx [card pos]]
              (if (= pos :down)
@@ -63,9 +83,10 @@
            hand)))
 
 
-(defn update-tableau [uid state]
+(defn update-tableau
   "Synchronize Tableau report with the blackjack game state broadcastet by
-  the server after every action"
+  the server after every action."
+  [uid state]
   (let [{:keys [player1-name dealer-hand]} state
         my-role (if (= uid player1-name) :player1 :player2)
         other-user (other-player my-role)

@@ -100,7 +100,8 @@
 
   (defmethod event-msg-handler :chsk/recv
     [{:as ev-msg :keys [?data]}]
-    (tableau/update-tableau (get @chsk-state :uid) (second ?data))
+    (when-not (= (get @chsk-state :uid) :sente/nil-uid)
+      (tableau/update-tableau (get @chsk-state :uid) (second ?data)))
     (debugf "Push event from server: %s" ?data))
 
   (defmethod event-msg-handler :chsk/handshake
