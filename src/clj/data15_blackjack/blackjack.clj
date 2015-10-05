@@ -1,7 +1,20 @@
+;; This namespace contains the game specific, non-tableau related
+;; functions required. It's designed for two players (at the moment)
+;; plus a dealer. The namespace has no external dependency: it can
+;; run on server or client side as required. The namespaced methods
+;; are invoked from the `server` namespace, from ring handlers.
+;;
+;; Majority of these functions are fork from: https://github.com/jdeisenberg/cljs-blackjack
 (ns data15-blackjack.blackjack
   (:require [data15-blackjack.utils :refer [other-player keywordize]]))
 
-(def game (atom {:deck             (into [] (shuffle (range 0 52)))
+;; `game` is the main state container atom. It contains:
+;;
+;;  * Deck and discard pile
+;;  * Cards in hand (for players & dealer)
+;;  * Status of hands (actual score & status info like ok, bust, blackjack)
+;;  * Feedback (text status message)
+(defonce game (atom {:deck             (into [] (shuffle (range 0 52)))
                  :dealer-hand      []
                  :dealer-status    nil
                  :player1-hand     []
@@ -25,7 +38,9 @@
          (keywordize player :name) name))
 
 
-;; GAME
+;; ---------------------------------------------------------
+;; # Game Logic
+
 (defn deal
   "Deal one card from the deck to a hand in the given
   position (face up or face down), possibly using the
@@ -81,10 +96,12 @@
   "This function takes a player's hand and returns a new hand
   with all the cards in the :up position"
   [hand]
-  (let [result (vec (map (fn [card] [(first card) :up]) hand))]
-    result))
+  (vec (map (fn [card] [(first card) :up]) hand)))
+
 
 (defn feedback
+  "Store personalized feedback message, practically the
+  result from `end-game`."
   [player message]
   (swap! game assoc (keywordize player :feedback) message))
 

@@ -18,12 +18,8 @@
                  [ring/ring-defaults "0.1.5"]
                  [compojure "1.4.0"]                        ; Or routing lib of your choice
                  [hiccup "1.0.5"]                           ; Optional, just for HTML
-                 [prismatic/dommy "1.1.0"]                  ; DOM event handler
+                 [prismatic/dommy "1.1.0"]]                 ; DOM event handler
 
-                 ;;; Transit deps optional; may be used to aid perf. of larger data payloads
-                 ;;; (see reference example for details):
-                 [com.cognitect/transit-clj "0.8.281"]
-                 [com.cognitect/transit-cljs "0.8.225"]]
 
   :plugins [[lein-cljsbuild "1.1.0"]
             [lein-pprint "1.1.2"]

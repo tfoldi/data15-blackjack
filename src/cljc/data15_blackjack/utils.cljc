@@ -1,3 +1,7 @@
+;; # Utility functions
+;;
+;; These functions are available from both clojure (web server)
+;; and clojurescript (borwser).
 (ns data15-blackjack.utils)
 
 (defn other-player
@@ -8,7 +12,7 @@
     :player1))
 
 (defn keywordize
-  "Create keyword like :player1-hand from `player1` and `hand`"
+  "Create keyword like `:player1-hand` from `player1` and `hand`"
   [player postfix]
   (keyword (str (name player) "-" (name postfix))))
 
