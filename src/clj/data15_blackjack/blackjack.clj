@@ -1,5 +1,5 @@
 ;; This namespace contains the game specific, non-tableau related
-;; functions required. It's designed for two players (at the moment)
+;; functions. It's designed for two players (at the moment)
 ;; plus a dealer. The namespace has no external dependency: it can
 ;; run on server or client side as required. The namespaced methods
 ;; are invoked from the `server` namespace, from ring handlers.
@@ -8,7 +8,7 @@
 (ns data15-blackjack.blackjack
   (:require [data15-blackjack.utils :refer [other-player keywordize]]))
 
-;; `game` is the main state container atom. It contains:
+;; `game` is the main state container atom. It has:
 ;;
 ;;  * Deck and discard pile
 ;;  * Cards in hand (for players & dealer)
@@ -173,9 +173,9 @@
   (if (and (= num-players 2) (not= (get-in @game
                                            [(keywordize (other-player role) :status) 2])
                                    :stand))
-    ; Other player is still playing
+    ;; Other player is still playing
     (swap! game assoc (keywordize role :feedback) "Waiting for other player to stand.")
-    ; We are done
+    ;; We are done
     (let [{:keys [deck dealer-hand player1-hand player2-hand discard-pile]} @game
           dhand (reveal dealer-hand)]
       (swap! game assoc :dealer-hand dhand)

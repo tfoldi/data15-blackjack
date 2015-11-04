@@ -2867,14 +2867,14 @@ net.brehaut.ClojureTools = (function (SH) {
 })(SyntaxHighlighter);
 </script><title>data15-blackjack -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="http://github.com/tfoldi/data15-blackjack">data15-blackjack</a></h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>Multiplayer blackjack game using Tableau JS API</p>
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.7.0</td></tr><tr><td class="dep-name">org.clojure/clojurescript</td><td class="dotted"><hr /></td><td class="dep-version">1.7.122</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.1.346.0-17112a-alpha</td></tr><tr><td class="dep-name">com.taoensso/sente</td><td class="dotted"><hr /></td><td class="dep-version">1.7.0-beta2</td></tr><tr><td class="dep-name">com.taoensso/timbre</td><td class="dotted"><hr /></td><td class="dep-version">4.1.2</td></tr><tr><td class="dep-name">http-kit</td><td class="dotted"><hr /></td><td class="dep-version">2.1.19</td></tr><tr><td class="dep-name">ring</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">ring/ring-defaults</td><td class="dotted"><hr /></td><td class="dep-version">0.1.5</td></tr><tr><td class="dep-name">compojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">hiccup</td><td class="dotted"><hr /></td><td class="dep-version">1.0.5</td></tr><tr><td class="dep-name">prismatic/dommy</td><td class="dotted"><hr /></td><td class="dep-version">1.1.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#data15-blackjack.blackjack">data15-blackjack.blackjack</a></li><li><a href="#data15-blackjack.server">data15-blackjack.server</a></li><li><a href="#data15_blackjack.client">data15_blackjack.client</a></li><li><a href="#data15-blackjack.tableau">data15-blackjack.tableau</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#data15-blackjack.blackjack" name="data15-blackjack.blackjack"><h1 class="project-name">data15-blackjack.blackjack</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>This namespace contains the game specific, non-tableau related
-functions required. It's designed for two players (at the moment)
+functions. It's designed for two players (at the moment)
 plus a dealer. The namespace has no external dependency: it can
 run on server or client side as required. The namespaced methods
 are invoked from the <code>server</code> namespace, from ring handlers.</p>
 
 <p>Majority of these functions are fork from: https://github.com/jdeisenberg/cljs-blackjack</p>
 </td><td class="codes"><pre class="brush: clojure">(ns data15-blackjack.blackjack
-  (:require [data15-blackjack.utils :refer [other-player keywordize]]))</pre></td></tr><tr><td class="docs"><p><code>game</code> is the main state container atom. It contains:</p>
+  (:require [data15-blackjack.utils :refer [other-player keywordize]]))</pre></td></tr><tr><td class="docs"><p><code>game</code> is the main state container atom. It has:</p>
 
 <ul>
 <li>Deck and discard pile</li>
@@ -3008,9 +3008,9 @@ are invoked from the <code>server</code> namespace, from ring handlers.</p>
   (if (and (= num-players 2) (not= (get-in @game
                                            [(keywordize (other-player role) :status) 2])
                                    :stand))
-    ; Other player is still playing
+    ;; Other player is still playing
     (swap! game assoc (keywordize role :feedback) &quot;Waiting for other player to stand.&quot;)
-    ; We are done
+    ;; We are done
     (let [{:keys [deck dealer-hand player1-hand player2-hand discard-pile]} @game
           dhand (reveal dealer-hand)]
       (swap! game assoc :dealer-hand dhand)
@@ -3183,7 +3183,8 @@ to the clients.</p>
 <h2>Init web server</h2>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Web server atom to store server information in</p>
 
-<p>   {:server _ :port _ :stop-fn (fn [])}</p>
+<pre><code>```{:server _ :port _ :stop-fn (fn [])}```
+</code></pre>
 
 <p>format</p>
 </td><td class="codes"><pre class="brush: clojure">(defonce web-server_
@@ -3308,7 +3309,7 @@ status have changed and the new status is :viz-ready, then send
 </td><td class="codes"><pre class="brush: clojure">(add-watch tableau/viz :ui
            (fn [_ _ _ new-state]
              (when (= :viz-ready (new-state :status))
-               (chsk-send! [:data15-blackjack/click &quot; load &quot;]))))</pre></td></tr><tr><td class="docs"><p>Define new multi-function which will dispatch on event-id</p>
+               (chsk-send! [:data15-blackjack/click &quot;load&quot;]))))</pre></td></tr><tr><td class="docs"><p>Define new multi-function which will dispatch on event-id</p>
 </td><td class="codes"><pre class="brush: clojure">(defmulti event-msg-handler :id)</pre></td></tr><tr><td class="docs"><p>Wrap for logging and dispatching. We will use a <code>defmulti</code>
 to deliver message based on event</p>
 </td><td class="codes"><pre class="brush: clojure">(defn event-msg-handler* [{:as ev-msg :keys [id ?data event]}]

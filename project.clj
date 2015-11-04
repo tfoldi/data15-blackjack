@@ -25,7 +25,7 @@
             [lein-pprint "1.1.2"]
             [lein-ancient "0.6.7"]
             [michaelblume/lein-marginalia "0.9.0"]
-            [com.cemerick/austin "0.1.6"]
+;            [com.cemerick/austin "0.1.6"]
             [lein-ring "0.9.7"]]
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj" "src/cljc"]

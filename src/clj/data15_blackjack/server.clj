@@ -183,7 +183,7 @@
 
 ;; Web server atom to store server information in
 ;;
-;;    {:server _ :port _ :stop-fn (fn [])}
+;;     ```{:server _ :port _ :stop-fn (fn [])}```
 ;;
 ;; format
 (defonce web-server_

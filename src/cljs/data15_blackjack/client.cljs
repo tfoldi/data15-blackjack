@@ -110,7 +110,7 @@
 (add-watch tableau/viz :ui
            (fn [_ _ _ new-state]
              (when (= :viz-ready (new-state :status))
-               (chsk-send! [:data15-blackjack/click " load "]))))
+               (chsk-send! [:data15-blackjack/click "load"]))))
 
 ;; Define new multi-function which will dispatch on event-id
 (defmulti event-msg-handler :id)

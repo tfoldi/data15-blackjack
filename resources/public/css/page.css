@@ -1,0 +1,9 @@
+#game-buttons {
+    top: -120px;
+    position: relative;
+    left: 175;
+}
+
+.game-button {
+    margin-left: 10px;
+}
